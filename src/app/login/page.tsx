@@ -50,7 +50,7 @@ export default function LoginPage() {
 
   const handleQuickLogin = async (role: 'student' | 'admin') => {
     setSubmitting(true);
-    const demoEmail = role === 'student' ? 'jaydeep@hostel.edu' : 'admin@hostel.edu';
+    const demoEmail = role === 'student' ? 'jayden@hostel.edu' : 'admin@hostel.edu';
     try {
       await login(demoEmail);
     } catch (err) {
@@ -133,7 +133,7 @@ export default function LoginPage() {
             className="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 py-3 px-3 text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors"
           >
             <UserCheck className="h-4 w-4 text-emerald-600" />
-            Student (Jaydeep)
+            Student (Jayden)
           </button>
           
           <button
