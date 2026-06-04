@@ -38,9 +38,9 @@ export function getMealCutoff(targetDateStr: string, mealType: MealType): Cutoff
     cutoff.setHours(22, 0, 0, 0);
     formattedCutoff = '10:00 PM previous day';
   } else if (mealType === 'lunch') {
-    // 9:00 AM same day
-    cutoff.setHours(9, 0, 0, 0);
-    formattedCutoff = '9:00 AM same day';
+    // 11:00 AM same day
+    cutoff.setHours(11, 0, 0, 0);
+    formattedCutoff = '11:00 AM same day';
   } else {
     // Dinner: 4:00 PM same day
     cutoff.setHours(16, 0, 0, 0);

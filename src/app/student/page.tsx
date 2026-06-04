@@ -34,6 +34,12 @@ export default function StudentDashboard() {
     menu: string;
   } | null>(null);
 
+  const [bookingConfirmation, setBookingConfirmation] = useState<{
+    dateStr: string;
+    mealType: MealType;
+    menu: string;
+  } | null>(null);
+
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   if (!currentUser) return null;
@@ -189,7 +195,7 @@ export default function StudentDashboard() {
           ) : (
             /* Book meal button */
             <button
-              onClick={() => handleBook(dateStr, mealType)}
+              onClick={() => setBookingConfirmation({ dateStr, mealType, menu })}
               disabled={isCutoffPassed}
               className={`w-full rounded-2xl font-bold text-xs py-3 border transition-colors ${
                 isCutoffPassed 
@@ -354,6 +360,74 @@ export default function StudentDashboard() {
             >
               Done
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Booking Confirmation Modal */}
+      {bookingConfirmation && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm sm:items-center sm:p-4">
+          <div className="w-full rounded-t-3xl bg-white p-6 shadow-2xl transition-all sm:max-w-md sm:rounded-3xl border border-slate-100 animate-slide-up">
+            
+            {/* Modal Header */}
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <div>
+                <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider">Confirm Booking</span>
+                <h3 className="text-lg font-bold text-slate-950 capitalize">Book {bookingConfirmation.mealType}?</h3>
+              </div>
+              <button 
+                onClick={() => setBookingConfirmation(null)}
+                className="rounded-full bg-slate-50 p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="py-6">
+              <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100 mb-4">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Date</span>
+                <p className="text-sm font-bold text-slate-900 mt-0.5">
+                  {new Date(bookingConfirmation.dateStr.replace(/-/g, '/')).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
+                </p>
+                
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mt-3">Today Menu</span>
+                <p className="text-xs font-medium text-slate-700 mt-0.5">
+                  🍽️ {bookingConfirmation.menu || 'Menu details not updated yet.'}
+                </p>
+              </div>
+
+              <div className="bg-emerald-50 rounded-2xl p-4 border border-emerald-100 text-left">
+                <div className="flex gap-2.5">
+                  <Leaf className="h-5 w-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h5 className="text-xs font-bold text-emerald-950">Food Waste Reduction</h5>
+                    <p className="text-[10px] text-emerald-800 mt-0.5">
+                      Confirming this booking lets the kitchen cook exact quantities. If you change your mind, cancel before the cutoff time to avoid waste!
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Actions */}
+            <div className="flex gap-3">
+              <button
+                onClick={() => setBookingConfirmation(null)}
+                className="flex-1 rounded-2xl border border-slate-200 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 transition-colors"
+              >
+                Go Back
+              </button>
+              <button
+                onClick={() => {
+                  handleBook(bookingConfirmation.dateStr, bookingConfirmation.mealType);
+                  setBookingConfirmation(null);
+                }}
+                className="flex-1 rounded-2xl bg-emerald-600 py-3 text-sm font-bold text-white shadow-md shadow-emerald-100 hover:bg-emerald-700 transition-colors"
+              >
+                Confirm Booking
+              </button>
+            </div>
           </div>
         </div>
       )}
